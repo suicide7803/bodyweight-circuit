@@ -151,6 +151,16 @@
   .media-frame{width:100%; height:100%; border:0; display:block; object-fit:cover}
   .svg-fallback{width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px}
   .fallback-note{color:var(--muted); font-size:11.5px; text-align:center; max-width:92%; line-height:1.45}
+
+  /* player video layout (영상 모드: 상단 영상 + 하단 시계) */
+  .video-top{display:none; width:100%}
+  .video-top .media-wrap{aspect-ratio:16/9; border-radius:14px}
+  #v-player.vmode .player-mid{justify-content:flex-start; padding-top:8px; gap:16px}
+  #v-player.vmode .video-top{display:block}
+  #v-player.vmode .ring{width:150px; height:150px}
+  #v-player.vmode .ring .fig{display:none}
+  #v-player.vmode .bigtime{justify-content:center; padding-bottom:0}
+  #v-player.vmode .bigtime .t{font-size:46px}
 </style>
 </head>
 <body>
@@ -266,6 +276,7 @@
     </div>
     <div class="phase-label" id="phaseLabel">준비</div>
     <div class="player-mid">
+      <div class="video-top" id="playerVideoTop"></div>
       <div class="ring">
         <svg viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="45" fill="none" stroke="var(--card2)" stroke-width="6"/>
@@ -482,7 +493,24 @@ function setMode(m){
     if(seg.type==='work') ex = exById(seg.exId);
     else if(seg.type==='rest') ex = exById(seg.nextId);
     else ex = exById(state.selected[0]);
-    if(ex) document.getElementById('playerFig').innerHTML = mediaHTML(ex, {autoplay:true, compact:true});
+    renderPlayerMedia(ex);
+  }
+}
+function renderPlayerMedia(ex){
+  const pv=document.getElementById('v-player');
+  const top=document.getElementById('playerVideoTop');
+  const fig=document.getElementById('playerFig');
+  if(!pv||!top||!fig) return;
+  const m=state.mediaMode;
+  const has=ex && ((m==='youtube'&&ex.youtube&&ex.youtube.id)||(m==='video'&&ex.video));
+  if(has){
+    pv.classList.add('vmode');
+    top.innerHTML=mediaHTML(ex,{autoplay:true});
+    fig.innerHTML='';
+  } else {
+    pv.classList.remove('vmode');
+    top.innerHTML='';
+    fig.innerHTML= ex?mediaHTML(ex,{autoplay:true,compact:true}):'';
   }
 }
 
@@ -693,14 +721,14 @@ function loadSeg(){
     phase.textContent='준비'; phase.style.color='var(--accent2)';
     document.getElementById('exName').textContent='곧 시작합니다';
     document.getElementById('exTip').textContent='첫 동작: '+(exById(state.selected[0])?.name||'');
-    document.getElementById('playerFig').innerHTML=mediaHTML(exById(state.selected[0]),{autoplay:true,compact:true});
+    renderPlayerMedia(exById(state.selected[0]));
     document.getElementById('nextUp').textContent='';
   } else if(seg.type==='work'){
     const e=exById(seg.exId);
     phase.textContent='운동'; phase.style.color='var(--accent)';
     document.getElementById('exName').textContent=e.name;
     document.getElementById('exTip').textContent=e.tip;
-    document.getElementById('playerFig').innerHTML=mediaHTML(e,{autoplay:true,compact:true});
+    renderPlayerMedia(e);
     const ni=peekNext(); document.getElementById('nextUp').innerHTML = ni? `다음 · <b>${ni}</b>`:'마지막 동작!';
     beep(880,.12);
   } else {
@@ -708,7 +736,7 @@ function loadSeg(){
     document.getElementById('exName').textContent='휴식';
     document.getElementById('exTip').textContent='숨 고르고 물 한 모금';
     const ne=exById(seg.nextId);
-    document.getElementById('playerFig').innerHTML= ne?mediaHTML(ne,{autoplay:true,compact:true}):'';
+    renderPlayerMedia(ne);
     document.getElementById('nextUp').innerHTML = ne? `다음 · <b>${ne.name}</b>`:'';
     beep(440,.12);
   }
