@@ -496,6 +496,7 @@ function setMode(m){
     renderPlayerMedia(ex);
   }
 }
+let playerMediaKey=null;
 function renderPlayerMedia(ex){
   const pv=document.getElementById('v-player');
   const top=document.getElementById('playerVideoTop');
@@ -503,6 +504,13 @@ function renderPlayerMedia(ex){
   if(!pv||!top||!fig) return;
   const m=state.mediaMode;
   const has=ex && ((m==='youtube'&&ex.youtube&&ex.youtube.id)||(m==='video'&&ex.video));
+  const key=m+':'+(ex?ex.id:'')+':'+(has?'v':'s');
+  // 같은 운동·같은 모드면 영상을 다시 로딩하지 않고 그대로 이어재생 (휴식→운동 연속)
+  if(key===playerMediaKey){
+    if(has) pv.classList.add('vmode'); else pv.classList.remove('vmode');
+    return;
+  }
+  playerMediaKey=key;
   if(has){
     pv.classList.add('vmode');
     top.innerHTML=mediaHTML(ex,{autoplay:true});
@@ -702,6 +710,7 @@ function nextWorkId(r,i){
 function startWorkout(){
   go('player'); segIdx=0; paused=false; requestWake();
   document.getElementById('playBtn').textContent='⏸';
+  playerMediaKey=null;
   loadSeg();
 }
 function loadSeg(){
