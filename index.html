@@ -148,7 +148,7 @@
   .mode-toggle .seg.on{background:var(--accent); color:#1a0f08}
   .mode-toggle .seg:active{transform:scale(.97)}
   .media-wrap{width:100%; aspect-ratio:1/1; border-radius:12px; overflow:hidden; background:#000; position:relative}
-  .media-frame{width:100%; height:100%; border:0; display:block; object-fit:cover}
+  .media-frame{width:100%; height:100%; border:0; display:block; object-fit:contain}
   .svg-fallback{width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px}
   .fallback-note{color:var(--muted); font-size:11.5px; text-align:center; max-width:92%; line-height:1.45}
 
@@ -328,7 +328,7 @@
 // pose points in a 0..100 box. Keys: head[x,y,r], shoulder, hip, and limb joints.
 // Renderer draws bones between present joints + head + optional arrows.
 const EX = [
-  {id:'squat', youtube:{id:'P-yaD24bUE8'}, name:'스쿼트', cat:'하체', lv:'초급',
+  {id:'squat', youtube:{id:'P-yaD24bUE8'}, video:'videos/squat.mp4', name:'스쿼트', cat:'하체', lv:'초급',
    tip:'발은 어깨너비. 엉덩이를 뒤로 빼며 무릎이 발끝을 넘지 않게 앉았다 선다.',
    pose:{ground:1, head:[43,25,6], shoulder:[46,35], hip:[55,53], kneeL:[42,61], footL:[44,90], elbowL:[37,40], handL:[27,40], arrows:[[72,40,72,58]]}},
   {id:'lunge', youtube:{id:'B7VQJiVv3xw'}, name:'런지', cat:'하체', lv:'초급',
@@ -347,7 +347,7 @@ const EX = [
    tip:'벽에 등을 붙이고 허벅지가 바닥과 수평이 되게 앉아 버틴다.',
    pose:{ground:1, wall:1, head:[70,30,6], shoulder:[72,40], hip:[72,62], kneeL:[50,62], footL:[50,90], elbowL:[60,52], handL:[44,58]}},
 
-  {id:'pushup', youtube:{id:'WDIpL0pjun0'}, name:'푸시업', cat:'상체', lv:'중급',
+  {id:'pushup', youtube:{id:'WDIpL0pjun0'}, video:'videos/pushup.mp4', name:'푸시업', cat:'상체', lv:'중급',
    tip:'몸을 일직선으로. 가슴이 바닥에 닿을 듯 내렸다 민다.',
    pose:{ground:1, head:[24,60,6], shoulder:[34,62], hip:[60,60], footL:[88,66], elbowL:[34,76], handL:[36,86]}},
   {id:'kneepushup', youtube:{id:'rR1efh-33AQ'}, name:'무릎 푸시업', cat:'상체', lv:'초급',
@@ -363,7 +363,7 @@ const EX = [
    tip:'엎드려 팔다리를 동시에 들어 등을 조였다 내린다.',
    pose:{ground:1, head:[33,66,6], shoulder:[41,71], hip:[60,71], elbowL:[33,64], handL:[23,58], kneeL:[70,66], footL:[80,59], arrows:[[24,52,24,44],[80,52,80,44]]}},
 
-  {id:'plank', youtube:{id:'wCBOqf-HrTI'}, name:'플랭크', cat:'코어', lv:'초급',
+  {id:'plank', youtube:{id:'wCBOqf-HrTI'}, video:'videos/plank.mp4', name:'플랭크', cat:'코어', lv:'초급',
    tip:'팔꿈치로 받치고 머리-엉덩이-발을 일직선으로 버틴다. 허리 꺼짐 금지.',
    pose:{ground:1, head:[26,61,6], shoulder:[35,64], hip:[58,68], footL:[87,75], elbowL:[35,82], handL:[24,82]}},
   {id:'sideplank', youtube:{id:'iNbH7_edNI8'}, name:'사이드 플랭크', cat:'코어', lv:'중급',
